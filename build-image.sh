@@ -1,9 +1,14 @@
 #!/bin/bash -ex
 ### Build a docker image for ubuntu i386.
 
+SUITE=xenial
+if [ ! -z $1 ]; then
+    SUITE=$1
+fi
+
 ### settings
 arch=i386
-suite=xenial
+suite=$SUITE
 chroot_dir="/var/chroot/$suite"
 apt_mirror='http://archive.ubuntu.com/ubuntu'
 docker_image="32bit/ubuntu:$suite"
@@ -53,7 +58,7 @@ tar cfz ubuntu.tgz -C $chroot_dir .
 cat ubuntu.tgz | docker import - $docker_image --message "Build with https://github.com/docker-32bit/ubuntu"
 
 # ### push image to Docker Hub
-# docker push $docker_image
+docker push $docker_image
 
 ### cleanup
 rm ubuntu.tgz
