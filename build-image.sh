@@ -53,7 +53,7 @@ tar cfz ubuntu.tgz -C $chroot_dir .
 cat ubuntu.tgz | docker import - $docker_image --message "Build with https://github.com/phzfi/ubuntu32"
 
 # ### push image to Docker Hub
-# docker push $docker_image
+docker push $docker_image
 
 ### cleanup
 rm ubuntu.tgz
