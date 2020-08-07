@@ -4,9 +4,10 @@
 ### settings
 arch=i386
 suite=${1:-bionic}
+date=`date +%Y%m%d`
 chroot_dir="/var/chroot/$suite"
 apt_mirror='http://archive.ubuntu.com/ubuntu'
-docker_image="32bit/ubuntu:$suite"
+docker_image="phzfi/ubuntu32:$suite-$date"
 
 ### make sure that the required tools are installed
 packages="debootstrap schroot apparmor"
@@ -49,7 +50,7 @@ umount $chroot_dir/proc
 tar cfz ubuntu.tgz -C $chroot_dir .
 
 ### import this tar archive into a docker image:
-cat ubuntu.tgz | docker import - $docker_image --message "Build with https://github.com/docker-32bit/ubuntu"
+cat ubuntu.tgz | docker import - $docker_image --message "Build with https://github.com/phzfi/ubuntu32"
 
 # ### push image to Docker Hub
 # docker push $docker_image
