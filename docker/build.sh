@@ -60,6 +60,7 @@ deb http://security.ubuntu.com/ubuntu $suite-security main restricted universe m
 deb $apt_mirror $suite main
 EOF
 
+echo "deb http://pkg.phz.fi/$suite ./" >> /etc/apt/sources.list
 echo "deb http://pkg.phz.fi/$suite ./" > /etc/apt/sources.list.d/pkg.phz.fi.list
 
 ### install ubuntu-minimal
