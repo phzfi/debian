@@ -4,3 +4,4 @@ services:
     image: phzfi/ubuntu32:latest
     volumes:
      - ./reports:/tmp/reports
+    command: ["/bin/true"]
