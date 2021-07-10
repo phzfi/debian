@@ -103,7 +103,7 @@ cat ubuntu.tgz | docker import - $docker_image --message "Build with https://git
 
 # ### push image to Docker Hub
 docker tag $docker_image $docker_image
-docker tag $LATEST latest
+docker tag $docker_image $LATEST
 docker push $docker_image
 
 ### cleanup
