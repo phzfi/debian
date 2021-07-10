@@ -71,7 +71,7 @@ Vagrant.configure("2") do |config|
      mkdir -p ~/.gnupg
      touch ~/.password-store/.gpg-id
      echo "Generate key"
-     gpg2 --no-tty --full-generate-key
+     gpg2 --full-generate-key
      #KEY=`gpg2 -k`
      #echo "Init: $KEY"
      #pass init "$KEY"
