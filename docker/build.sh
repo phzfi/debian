@@ -34,12 +34,6 @@ chroot_dir="/var/chroot/$suite"
 apt_mirror='http://fi.archive.ubuntu.com/ubuntu'
 docker_image="phzfi/ubuntu32:$suite-$VERSION"
 
-### make sure that the required tools are installed
-packages="debootstrap dchroot apparmor"
-which docker || packages="$packages phz"
-
-apt-get install -y $packages
-
 ### install a minbase system with debootstrap
 export DEBIAN_FRONTEND=noninteractive
 debootstrap --variant=minbase --arch=$arch $suite $chroot_dir $apt_mirror
