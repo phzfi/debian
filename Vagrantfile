@@ -71,8 +71,8 @@ Vagrant.configure("2") do |config|
      touch /root/.password-store/.gpg-id
      echo "Generate key"
      gpg2 --full-generate-key
-     KEY=`gpg2 -k`
-     echo "Init: $KEY"
-     pass init "$KEY"
+     #KEY=`gpg2 -k`
+     #echo "Init: $KEY"
+     #pass init "$KEY"
   SHELL
 end
