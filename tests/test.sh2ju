@@ -1,0 +1,12 @@
+#!/bin/bash
+
+source /usr/src/shell2junit/sh2ju.sh
+source ~/.env
+
+juLog -name=TestGitIsInstalled \
+   [ `which git | wc -l` -eq 1 ]
+
+
+touch results/provision-completed-api.txt
+
+exit 0
