@@ -61,17 +61,20 @@ deb http://security.ubuntu.com/ubuntu $suite-security main restricted universe m
 deb $apt_mirror $suite main
 EOF
 
-echo "deb http://pkg.phz.fi/$suite ./" > $chroot_dir/etc/apt/sources.list.d/pkg.phz.fi.list
-
 ### install ubuntu-minimal
 cp /etc/resolv.conf $chroot_dir/etc/resolv.conf
 sudo mount -o bind /proc $chroot_dir/proc
-cp /vagrant/phz.gpg $chroot_dir/root/phz.gpg
-chroot $chroot_dir apt-key add /root/phz.gpg
 chroot $chroot_dir apt-get update
 chroot $chroot_dir apt-get -y upgrade
 chroot $chroot_dir apt-get -y install ubuntu-minimal
+
+cp /vagrant/phz.gpg $chroot_dir/root/phz.gpg
+chroot $chroot_dir apt-key add /root/phz.gpg
+echo "deb http://pkg.phz.fi/$suite ./" > $chroot_dir/etc/apt/sources.list.d/pkg.phz.fi.list
+chroot $chroot_dir apt-get update
 chroot $chroot_dir apt-get -y install phz-common
+
+
 
 ### install sh2ju
 cp scripts/install-sh2ju.sh $chroot_dir/tmp
