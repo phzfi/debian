@@ -77,7 +77,7 @@ chroot $chroot_dir apt-get -y install phz-common
 
 
 ### install sh2ju
-cp scripts/install-sh2ju.sh $chroot_dir/tmp
+cp /vagrant/scripts/install-sh2ju.sh $chroot_dir/tmp
 cp tests/* $chroot_dir/tmp
 sudo mkdir -p $chroot_dir/results
 chroot $chroot_dir /tmp/install-sh2ju.sh
