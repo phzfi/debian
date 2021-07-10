@@ -65,6 +65,10 @@ Vagrant.configure("2") do |config|
   # documentation for more information about their specific syntax and use.
   config.vm.provision "shell", inline: <<-SHELL
      apt-get update
-     apt-get install -y debootstrap schroot apparmor docker.io docker-compose
+     apt-get install -y debootstrap schroot apparmor docker.io docker-compose gnupg2 pass 
+     #see https://stackoverflow.com/questions/51222996/docker-login-fails-on-a-server-with-no-x11-installed
+     gpg2 --full-generate-key
+     KEY=`gpg2 -k`
+     pass init "$KEY"
   SHELL
 end
