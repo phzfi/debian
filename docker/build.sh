@@ -51,7 +51,7 @@ export DEBIAN_FRONTEND=noninteractive
 sudo debootstrap --variant=minbase --arch=$arch $suite $chroot_dir $apt_mirror
 
 ### update the list of package sources
-cat <<EOF > $chroot_dir/etc/apt/sources.list
+sudo cat <<EOF > $chroot_dir/etc/apt/sources.list
 deb $apt_mirror $suite main restricted universe multiverse
 deb $apt_mirror $suite-updates main restricted universe multiverse
 deb $apt_mirror $suite-backports main restricted universe multiverse
@@ -62,7 +62,7 @@ EOF
 
 ### install ubuntu-minimal
 cp /etc/resolv.conf $chroot_dir/etc/resolv.conf
-mount -o bind /proc $chroot_dir/proc
+sudo mount -o bind /proc $chroot_dir/proc
 schroot $chroot_dir apt-get update
 schroot $chroot_dir apt-get -y upgrade
 schroot $chroot_dir apt-get -y install ubuntu-minimal
@@ -71,7 +71,7 @@ schroot $chroot_dir apt-get -y install phz-common
 ### install sh2ju
 cp scripts/install-sh2ju.sh $chroot_dir/tmp
 cp tests/* $chroot_dir/tmp
-mkdir -p $chroot_dir/results
+sudo mkdir -p $chroot_dir/results
 schroot $chroot_dir /tmp/install-sh2ju.sh
 
 ### cleanup
@@ -85,7 +85,7 @@ chroot_pids=$(for p in /proc/*/root; do ls -l $p; done | grep $chroot_dir | cut 
 test -z "$chroot_pids" || (kill -9 $chroot_pids; sleep 2)
 
 ### unmount /proc
-umount $chroot_dir/proc
+sudo umount $chroot_dir/proc
 
 ### create a tar archive from the chroot directory
 tar cfz ubuntu.tgz -C $chroot_dir .
