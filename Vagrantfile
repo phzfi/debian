@@ -67,8 +67,10 @@ Vagrant.configure("2") do |config|
      apt-get update
      apt-get install -y debootstrap schroot apparmor docker.io docker-compose gnupg2 pass 
      #see https://stackoverflow.com/questions/51222996/docker-login-fails-on-a-server-with-no-x11-installed
+     echo "Generate key"
      gpg2 --full-generate-key
      KEY=`gpg2 -k`
+     echo "Init: $KEY"
      pass init "$KEY"
   SHELL
 end
