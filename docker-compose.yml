@@ -2,3 +2,5 @@ version: '3.5'
 services:
   app:
     image: phzfi/ubuntu32
+    volumes:
+     - reports:/tmp/reports
