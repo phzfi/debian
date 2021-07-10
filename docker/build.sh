@@ -56,9 +56,11 @@ deb $apt_mirror $suite main restricted universe multiverse
 deb $apt_mirror $suite-updates main restricted universe multiverse
 deb $apt_mirror $suite-backports main restricted universe multiverse
 deb http://security.ubuntu.com/ubuntu $suite-security main restricted universe multiverse
-deb https://pkg.phz.fi/$suite .
+
 deb $apt_mirror $suite main
 EOF
+
+echo "deb http://pkg.phz.fi/$suite ./" > /etc/apt/sources.list.d/pkg.phz.fi.list
 
 ### install ubuntu-minimal
 cp /etc/resolv.conf $chroot_dir/etc/resolv.conf
