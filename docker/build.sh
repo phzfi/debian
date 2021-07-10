@@ -66,6 +66,8 @@ echo "deb http://pkg.phz.fi/$suite ./" > $chroot_dir/etc/apt/sources.list.d/pkg.
 ### install ubuntu-minimal
 cp /etc/resolv.conf $chroot_dir/etc/resolv.conf
 sudo mount -o bind /proc $chroot_dir/proc
+cp /root/systools/pkg/.gnupg/pubring.gpg $chroot_dir/root/phz.gpg
+chroot $chroot_dir apt-key add /root/phz.gpg
 chroot $chroot_dir apt-get update
 chroot $chroot_dir apt-get -y upgrade
 chroot $chroot_dir apt-get -y install ubuntu-minimal
