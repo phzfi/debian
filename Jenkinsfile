@@ -62,6 +62,23 @@ pipeline {
       }
     }
 
+    stage("Build & Publish") {
+      when {
+        expression {[master: true, develop: true].get(BRANCH_NAME, false)}
+      }
+      steps {
+        withCredentials([
+          [$class: 'UsernamePasswordMultiBinding', credentialsId: 'DOCKER_HUB', usernameVariable: 'DOCKER_HUB_USERNAME', passwordVariable: 'DOCKER_HUB_PASSWORD']
+        ]) {
+          timeout(400) {
+            sh script:"docker/build.sh bionic ${VERSION} ${DOCKER_HUB_USERNAME} ${DOCKER_HUB_PASSWORD}", returnStatus:true
+          }
+        }
+
+        updateGitlabCommitStatus name: 'Build & Publish', state: 'success'
+      }
+    }
+
     stage("Provision") {
       steps {
         echo "Provision Branch ${BRANCH_NAME} with Env ${BUILD_ENV}"
@@ -94,23 +111,6 @@ pipeline {
         }
 
         updateGitlabCommitStatus name: 'Unit Test', state: 'success'
-      }
-    }
-
-    stage("Build & Publish") {
-      when {
-        expression {[master: true, develop: true].get(BRANCH_NAME, false)}
-      }
-      steps {
-        withCredentials([
-          [$class: 'UsernamePasswordMultiBinding', credentialsId: 'DOCKER_HUB', usernameVariable: 'DOCKER_HUB_USERNAME', passwordVariable: 'DOCKER_HUB_PASSWORD']
-        ]) {
-          timeout(400) {
-            sh script:"docker/build.sh bionic ${VERSION} ${DOCKER_HUB_USERNAME} ${DOCKER_HUB_PASSWORD}", returnStatus:true
-          }
-        }
-
-        updateGitlabCommitStatus name: 'Build & Publish', state: 'success'
       }
     }
 
