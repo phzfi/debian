@@ -48,7 +48,7 @@ fi
 
 ### install a minbase system with debootstrap
 export DEBIAN_FRONTEND=noninteractive
-debootstrap --variant=minbase --arch=$arch $suite $chroot_dir $apt_mirror
+sudo debootstrap --variant=minbase --arch=$arch $suite $chroot_dir $apt_mirror
 
 ### update the list of package sources
 cat <<EOF > $chroot_dir/etc/apt/sources.list
