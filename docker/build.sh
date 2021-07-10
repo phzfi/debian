@@ -63,21 +63,21 @@ EOF
 ### install ubuntu-minimal
 cp /etc/resolv.conf $chroot_dir/etc/resolv.conf
 sudo mount -o bind /proc $chroot_dir/proc
-schroot $chroot_dir apt-get update
-schroot $chroot_dir apt-get -y upgrade
-schroot $chroot_dir apt-get -y install ubuntu-minimal
-schroot $chroot_dir apt-get -y install phz-common
+chroot $chroot_dir apt-get update
+chroot $chroot_dir apt-get -y upgrade
+chroot $chroot_dir apt-get -y install ubuntu-minimal
+chroot $chroot_dir apt-get -y install phz-common
 
 ### install sh2ju
 cp scripts/install-sh2ju.sh $chroot_dir/tmp
 cp tests/* $chroot_dir/tmp
 sudo mkdir -p $chroot_dir/results
-schroot $chroot_dir /tmp/install-sh2ju.sh
+chroot $chroot_dir /tmp/install-sh2ju.sh
 
 ### cleanup
-schroot $chroot_dir apt-get autoclean
-schroot $chroot_dir apt-get clean
-schroot $chroot_dir apt-get autoremove
+chroot $chroot_dir apt-get autoclean
+chroot $chroot_dir apt-get clean
+chroot $chroot_dir apt-get autoremove
 rm $chroot_dir/etc/resolv.conf
 
 ### kill any processes that are running on chroot
