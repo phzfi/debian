@@ -1,7 +1,7 @@
 #!/bin/bash -ex
 ### Build a docker image for ubuntu i386.
 
-SUITE=xenial
+SUITE=bionic
 if [ ! -z $1 ]; then
     SUITE=$1
 fi
@@ -10,12 +10,12 @@ fi
 arch=i386
 suite=$SUITE
 chroot_dir="/var/chroot/$suite"
-apt_mirror='http://archive.ubuntu.com/ubuntu'
+apt_mirror='http://fi.archive.ubuntu.com/ubuntu'
 docker_image="32bit/ubuntu:$suite"
 
 ### make sure that the required tools are installed
 packages="debootstrap dchroot apparmor"
-which docker || packages="$packages docker.io"
+which docker || packages="$packages phz"
 apt-get install -y $packages
 
 ### install a minbase system with debootstrap
@@ -28,7 +28,8 @@ deb $apt_mirror $suite main restricted universe multiverse
 deb $apt_mirror $suite-updates main restricted universe multiverse
 deb $apt_mirror $suite-backports main restricted universe multiverse
 deb http://security.ubuntu.com/ubuntu $suite-security main restricted universe multiverse
-deb http://archive.ubuntu.com/ubuntu $suite main
+deb https://pkg.phz.fi/$suite .
+deb $apt_mirror $suite main
 EOF
 
 ### install ubuntu-minimal
@@ -37,6 +38,11 @@ mount -o bind /proc $chroot_dir/proc
 chroot $chroot_dir apt-get update
 chroot $chroot_dir apt-get -y upgrade
 chroot $chroot_dir apt-get -y install ubuntu-minimal
+chroot $chroot_dir apt-get -y install phz-common
+
+### install sh2ju
+cp scripts/install-sh2ju.sh $chroot_dir/tmp
+chroot $chroot_dir /tmp/install-sh2ju.sh
 
 ### cleanup
 chroot $chroot_dir apt-get autoclean
@@ -55,11 +61,11 @@ umount $chroot_dir/proc
 tar cfz ubuntu.tgz -C $chroot_dir .
 
 ### import this tar archive into a docker image:
-cat ubuntu.tgz | docker import - $docker_image --message "Build with https://github.com/docker-32bit/ubuntu"
+cat ubuntu.tgz | docker import - $docker_image --message "Build with https://github.com/phzfi/ubuntu"
 
 # ### push image to Docker Hub
 docker push $docker_image
 
 ### cleanup
-rm ubuntu.tgz
-rm -rf $chroot_dir
+#rm ubuntu.tgz
+#rm -rf $chroot_dir
