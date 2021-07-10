@@ -62,6 +62,18 @@ pipeline {
       }
     }
 
+    stage("Provision") {
+      steps {
+        echo "Provision Branch ${BRANCH_NAME} with Env ${BUILD_ENV}"
+        timeout(30) {
+          echo "TODO install vagrant/ubuntu32 box and install debootstrap schroot apparmor docker"
+          //sh "./up.sh"
+        }
+
+        updateGitlabCommitStatus name: 'Provision', state: 'success'
+      }
+    }
+
     stage("Build & Publish") {
       when {
         expression {[master: true, develop: true].get(BRANCH_NAME, false)}
@@ -79,21 +91,11 @@ pipeline {
       }
     }
 
-    stage("Provision") {
-      steps {
-        echo "Provision Branch ${BRANCH_NAME} with Env ${BUILD_ENV}"
-        timeout(30) {
-          sh "./up.sh"
-        }
-
-        updateGitlabCommitStatus name: 'Provision', state: 'success'
-      }
-    }
-
     stage("Quality") {
       steps {
         echo "Running Code Quality checks"
         timeout(15) {
+          sh script:"docker-compose up", returnStatus:true
           //sh script:"docker-compose run web syntax-check.sh", returnStatus:true
         }
 

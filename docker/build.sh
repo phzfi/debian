@@ -34,6 +34,18 @@ chroot_dir="/var/chroot/$suite"
 apt_mirror='http://fi.archive.ubuntu.com/ubuntu'
 docker_image="phzfi/ubuntu32:$suite-$VERSION"
 
+# Verify tools
+TEST=`which debootstrap |wc -l`
+if test $TEST -eq 0; then
+    echo "FAIL: Required tool debootrap is missing"
+    exit 1
+fi
+TEST=`which schroot |wc -l`
+if test $TEST -eq 0; then
+    echo "FAIL: Required tool schroot is missing"
+    exit 1
+fi
+
 ### install a minbase system with debootstrap
 export DEBIAN_FRONTEND=noninteractive
 debootstrap --variant=minbase --arch=$arch $suite $chroot_dir $apt_mirror
@@ -51,21 +63,21 @@ EOF
 ### install ubuntu-minimal
 cp /etc/resolv.conf $chroot_dir/etc/resolv.conf
 mount -o bind /proc $chroot_dir/proc
-chroot $chroot_dir apt-get update
-chroot $chroot_dir apt-get -y upgrade
-chroot $chroot_dir apt-get -y install ubuntu-minimal
-chroot $chroot_dir apt-get -y install phz-common
+schroot $chroot_dir apt-get update
+schroot $chroot_dir apt-get -y upgrade
+schroot $chroot_dir apt-get -y install ubuntu-minimal
+schroot $chroot_dir apt-get -y install phz-common
 
 ### install sh2ju
 cp scripts/install-sh2ju.sh $chroot_dir/tmp
 cp tests/* $chroot_dir/tmp
 mkdir -p $chroot_dir/results
-chroot $chroot_dir /tmp/install-sh2ju.sh
+schroot $chroot_dir /tmp/install-sh2ju.sh
 
 ### cleanup
-chroot $chroot_dir apt-get autoclean
-chroot $chroot_dir apt-get clean
-chroot $chroot_dir apt-get autoremove
+schroot $chroot_dir apt-get autoclean
+schroot $chroot_dir apt-get clean
+schroot $chroot_dir apt-get autoremove
 rm $chroot_dir/etc/resolv.conf
 
 ### kill any processes that are running on chroot
