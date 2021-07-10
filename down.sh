@@ -1,2 +1,2 @@
 #!/bin/bash
-vagrant down
+vagrant destroy -f
