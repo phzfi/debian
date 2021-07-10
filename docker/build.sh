@@ -105,6 +105,7 @@ cat ubuntu.tgz | docker import - $docker_image --message "Build with https://git
 docker tag $docker_image $docker_image
 docker tag $docker_image $LATEST
 docker push $docker_image
+docker push $LATEST
 
 ### cleanup
 #rm ubuntu.tgz
