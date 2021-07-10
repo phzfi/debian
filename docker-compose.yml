@@ -3,4 +3,4 @@ services:
   app:
     image: phzfi/ubuntu32
     volumes:
-     - reports:/tmp/reports
+     - ./reports:/tmp/reports
