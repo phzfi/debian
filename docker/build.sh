@@ -33,6 +33,7 @@ date=`date +%Y%m%d`
 chroot_dir="/var/chroot/$suite"
 apt_mirror='http://fi.archive.ubuntu.com/ubuntu'
 docker_image="phzfi/ubuntu32:$suite-$VERSION"
+LATEST="phzfi/ubuntu32:latest"
 
 # Verify tools
 TEST=`which debootstrap |wc -l`
@@ -96,6 +97,8 @@ tar cfz ubuntu.tgz -C $chroot_dir .
 cat ubuntu.tgz | docker import - $docker_image --message "Build with https://github.com/phzfi/ubuntu32"
 
 # ### push image to Docker Hub
+docker tag $docker_image $docker_image
+docker tag $LATEST latest
 docker push $docker_image
 
 ### cleanup
