@@ -3,7 +3,7 @@ def PROJECT_NAME = "ubuntu32"
 def SLACK_CHANNEL = "#infra"
 pipeline {
   agent {
-    label 'docker'
+    label 'vagrant'
   }
 
   environment {
@@ -66,8 +66,7 @@ pipeline {
       steps {
         echo "Provision Branch ${BRANCH_NAME} with Env ${BUILD_ENV}"
         timeout(30) {
-          echo "TODO install vagrant/ubuntu32 box and install debootstrap schroot apparmor docker"
-          //sh "./up.sh"
+          sh "./up.sh"
         }
 
         updateGitlabCommitStatus name: 'Provision', state: 'success'
@@ -83,7 +82,7 @@ pipeline {
           [$class: 'UsernamePasswordMultiBinding', credentialsId: 'DOCKER_HUB', usernameVariable: 'DOCKER_HUB_USERNAME', passwordVariable: 'DOCKER_HUB_PASSWORD']
         ]) {
           timeout(400) {
-            sh script:"docker/build.sh bionic ${VERSION} ${DOCKER_HUB_USERNAME} ${DOCKER_HUB_PASSWORD}", returnStatus:true
+            sh script:"vagrant ssh sudo /vagrant/docker/build.sh bionic ${VERSION} ${DOCKER_HUB_USERNAME} ${DOCKER_HUB_PASSWORD}", returnStatus:true
           }
         }
 
