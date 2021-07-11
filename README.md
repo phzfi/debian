@@ -27,6 +27,12 @@ Use older 32bit hardware for sustainable development and sustainable code. Reduc
 
 ### 2.1. Technologies
 
+* Docker 32bit
+* Ubuntu (bionic/18.04 LTS)
+* Jenkins declarative multibranch pipeline
+* Vagrant during building
+* sh2ju for testing
+
 ### 2.2. Naming, Terms and Key Concepts
 
 ### 2.3. Coding Convention
