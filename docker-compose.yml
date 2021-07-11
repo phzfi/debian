@@ -3,5 +3,5 @@ services:
   app:
     image: phzfi/ubuntu32:latest
     volumes:
-     - ./reports:/tmp/reports
+     - ./reports:/results
     command: ["/bin/true"]
