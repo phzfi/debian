@@ -33,7 +33,7 @@ date=`date +%Y%m%d`
 chroot_dir="/var/chroot/$suite"
 apt_mirror='http://fi.archive.ubuntu.com/ubuntu'
 docker_image="phzfi/ubuntu32:$suite-$VERSION"
-LATEST="phzfi/ubuntu32:latest"
+LATEST="phzfi/ubuntu32:$suite-latest"
 
 # Verify tools
 TEST=`which debootstrap |wc -l`
