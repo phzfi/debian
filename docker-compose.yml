@@ -3,5 +3,7 @@ services:
   app:
     image: phzfi/ubuntu32:latest
     volumes:
-     - ./reports:/results
-    command: ["/bin/true"]
+     - ./reports:/tmp/results
+     - ./tests:/tests
+     - ./.env:/root/.env
+    command: ["/tests/test.sh2ju"]
