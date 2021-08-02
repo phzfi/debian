@@ -135,8 +135,8 @@ pipeline {
       script {
         //sh "./down.sh || true"
         sh "sudo chown -R jenkins:jenkins ."
+        ciGame
       }
-      ciGame
     }
     success {
       script {
