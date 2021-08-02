@@ -6,6 +6,8 @@ pipeline {
     label 'vagrant'
   }
 
+  ciGame
+
   environment {
     BRANCH_NAME = "${GIT_BRANCH}"
     BUILD_ENV = [master: 'prod', develop: 'stg'].get(GIT_BRANCH, 'dev')
@@ -135,7 +137,6 @@ pipeline {
       script {
         //sh "./down.sh || true"
         sh "sudo chown -R jenkins:jenkins ."
-        ciGame
       }
     }
     success {
