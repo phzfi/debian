@@ -6,7 +6,6 @@ pipeline {
     label 'vagrant'
   }
 
-  ciGame
 
   environment {
     BRANCH_NAME = "${GIT_BRANCH}"
@@ -19,6 +18,7 @@ pipeline {
     ansiColor('xterm')
     gitLabConnection('ubuntu32')
     //skipDefaultCheckout(true)
+    ciGame
   }
 
   triggers {
