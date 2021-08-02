@@ -19,6 +19,10 @@ pipeline {
     //skipDefaultCheckout(true)
   }
 
+  configure { 
+    project -> project / publishers << 'hudson.plugins.cigame.GamePublisher' {}
+  }
+
   triggers {
     gitlab(triggerOnPush: true, triggerOnMergeRequest: true, branchFilterType: 'All')
   }
