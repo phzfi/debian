@@ -1,3 +1,3 @@
 #!/bin/bash
-rm reports/*
+rm reports/* || true
 

@@ -127,12 +127,11 @@ pipeline {
         updateGitlabCommitStatus name: 'Acceptance Test', state: 'success'
       }
     }
-
-
   }
 
   post {
     always {
+      ciGame()
       script {
         //sh "./down.sh || true"
         sh "sudo chown -R jenkins:jenkins ."
