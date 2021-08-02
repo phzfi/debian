@@ -26,7 +26,7 @@ pipeline {
   stages {
     stage("Clean") {
       steps {
-        step([$class: 'GamePublisher'])
+        ciGame()
         script {
           echo "Parse changelog"
 /*
