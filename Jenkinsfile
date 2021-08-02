@@ -26,7 +26,7 @@ pipeline {
   stages {
     stage("Clean") {
       steps {
-        ciGame
+        step([$class: 'GameDescriptor'])
         script {
           echo "Parse changelog"
 /*
