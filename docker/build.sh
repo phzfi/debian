@@ -68,8 +68,8 @@ chroot $chroot_dir apt-get update
 chroot $chroot_dir apt-get -y upgrade
 chroot $chroot_dir apt-get -y install ubuntu-minimal gnupg2
 
-cp /vagrant/phz.gpg $chroot_dir/root/phz.gpg
-chroot $chroot_dir apt-key add /root/phz.gpg
+cp /vagrant/pkg.phz.fi.gpg $chroot_dir/root/pkg.phz.fi.gpg
+chroot $chroot_dir apt-key add /root/pkg.phz.fi.gpg
 echo "deb http://pkg.phz.fi/$suite ./" > $chroot_dir/etc/apt/sources.list.d/pkg.phz.fi.list
 chroot $chroot_dir apt-get update
 chroot $chroot_dir apt-get -y install phz-common
