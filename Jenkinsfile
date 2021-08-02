@@ -6,7 +6,6 @@ pipeline {
     label 'vagrant'
   }
 
-
   environment {
     BRANCH_NAME = "${GIT_BRANCH}"
     BUILD_ENV = [master: 'prod', develop: 'stg'].get(GIT_BRANCH, 'dev')
@@ -18,7 +17,6 @@ pipeline {
     ansiColor('xterm')
     gitLabConnection('ubuntu32')
     //skipDefaultCheckout(true)
-    ciGame
   }
 
   triggers {
@@ -28,6 +26,7 @@ pipeline {
   stages {
     stage("Clean") {
       steps {
+        ciGame
         script {
           echo "Parse changelog"
 /*
