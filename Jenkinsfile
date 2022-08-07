@@ -26,6 +26,7 @@ pipeline {
   stages {
     stage("Clean") {
       steps {
+        ciGame()
         script {
           echo "Parse changelog"
 /*
@@ -126,12 +127,11 @@ pipeline {
         updateGitlabCommitStatus name: 'Acceptance Test', state: 'success'
       }
     }
-
-
   }
 
   post {
     always {
+      ciGame()
       script {
         //sh "./down.sh || true"
         sh "sudo chown -R jenkins:jenkins ."
