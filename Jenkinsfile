@@ -74,7 +74,7 @@ pipeline {
       }
     }
 
-    stage("Build & Publish") {
+    stage("Build") {
       when {
         expression {[master: true, develop: true].get(BRANCH_NAME, false)}
       }
@@ -87,7 +87,7 @@ pipeline {
           }
         }
 
-        updateGitlabCommitStatus name: 'Build & Publish', state: 'success'
+        updateGitlabCommitStatus name: 'Build', state: 'success'
       }
     }
 
