@@ -1,10 +1,10 @@
-# PHZ Full Stack ubuntu32
+# PHZ Full Stack debian32
 
 ## 1. Project Description
 
-Build a docker image for ubuntu i386. https://hub.docker.com/r/phzfi/ubuntu32
+Build a docker image for PHZ Debian i386. https://hub.docker.com/r/phzfi/debian32
 
-Run `build-image.sh` to build the docker image `phzfi/ubuntu:bionic`.
+Run `build-image.sh` to build the docker image `phzfi/debian32:sid`.
 
 See also:
  - https://github.com/ioft/dockerhub
@@ -28,7 +28,7 @@ Use older 32bit hardware for sustainable development and sustainable code. Reduc
 ### 2.1. Technologies
 
 * Docker 32bit
-* Ubuntu (bionic/18.04 LTS)
+* Debian (sid)
 * Jenkins declarative multibranch pipeline
 * Vagrant during building
 * sh2ju for testing
