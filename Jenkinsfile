@@ -26,7 +26,6 @@ pipeline {
   stages {
     stage("Clean") {
       steps {
-        ciGame()
         script {
           echo "Parse changelog"
 /*
