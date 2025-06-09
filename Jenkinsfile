@@ -131,7 +131,6 @@ pipeline {
 
   post {
     always {
-      ciGame()
       script {
         //sh "./down.sh || true"
         sh "sudo chown -R jenkins:jenkins ."
