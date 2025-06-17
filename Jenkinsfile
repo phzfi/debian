@@ -26,7 +26,6 @@ pipeline {
   stages {
     stage("Clean") {
       steps {
-        ciGame()
         script {
           echo "Parse changelog"
 /*
@@ -131,7 +130,6 @@ pipeline {
 
   post {
     always {
-      ciGame()
       script {
         //sh "./down.sh || true"
         sh "sudo chown -R jenkins:jenkins ."
