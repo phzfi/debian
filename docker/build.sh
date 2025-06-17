@@ -1,7 +1,7 @@
 #!/bin/bash -ex
 ### Build a docker image for ubuntu i386.
 
-SUITE=bionic
+SUITE=bookworm
 if [ ! -z $1 ]; then
     SUITE=$1
 fi
@@ -15,7 +15,7 @@ if [ -z "$VERSION" ]; then
   exit 1
 fi
 if [ -z "$USER" ]; then
-  echo "Usage: ./build.sh <version>, e.g. ./build.sh latest user password"
+  echo "Usage: ./build.sh <version>, e.g. ./build.sh latest docker_hub_user docker_hub_password"
   exit 1
 fi
 if [ -z "$PASSWORD" ]; then
@@ -27,13 +27,14 @@ fi
 docker login -u $USER -p $PASSWORD
 
 ### settings
-arch=i386
+#arch=i386
+arch=amd64
 suite=${1:-unstable}
 date=`date +%Y%m%d`
 chroot_dir="/var/chroot/$suite"
 apt_mirror="https://deb.debian.org/debian/"
-docker_image="phzfi/debian32:$suite-$VERSION"
-LATEST="phzfi/debian32:$suite-latest"
+docker_image="phzfi/debian:$suite-$VERSION"
+LATEST="phzfi/debian:$suite-latest"
 
 # Verify tools
 TEST=`which debootstrap |wc -l`
@@ -47,9 +48,13 @@ if test $TEST -eq 0; then
     exit 1
 fi
 
+###Clean
+./clean.sh $suite
+
 ### install a minbase system with debootstrap
 export DEBIAN_FRONTEND=noninteractive
-sudo debootstrap --extractor=ar --variant=minbase --arch=$arch $suite $chroot_dir $apt_mirror
+debootstrap --variant=minbase --arch=$arch $suite $chroot_dir $apt_mirror
+echo "DONE"
 
 ### update the list of package sources
 sudo cat <<EOF > $chroot_dir/etc/apt/sources.list
@@ -98,7 +103,7 @@ sudo umount $chroot_dir/proc
 tar cfz debian.tgz -C $chroot_dir .
 
 ### import this tar archive into a docker image:
-cat debian.tgz | docker import - $docker_image --message "Build with https://github.com/phzfi/debian32"
+cat debian.tgz | docker import - $docker_image --message "Build with https://github.com/phzfi/debian"
 
 # ### push image to Docker Hub
 docker tag $docker_image $docker_image
