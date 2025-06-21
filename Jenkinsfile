@@ -20,7 +20,9 @@ pipeline {
   }
 
   triggers {
-    gitlab(triggerOnPush: true, triggerOnMergeRequest: true, branchFilterType: 'All')
+//    gitlab(triggerOnPush: true, triggerOnMergeRequest: true, branchFilterType: 'All')
+    pollSCM('H/5 8-20 1-6 * *')
+    cron('30 02 * * 1')
   }
 
   stages {
