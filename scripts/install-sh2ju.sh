@@ -11,3 +11,4 @@ else
      cd ..
 fi
 
+apt install -y bc
