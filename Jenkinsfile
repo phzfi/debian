@@ -1,5 +1,5 @@
 def CHANGELOG
-def PROJECT_NAME = "ubuntu32"
+def PROJECT_NAME = "debian"
 def SLACK_CHANNEL = "#infra"
 pipeline {
   agent {
@@ -15,12 +15,10 @@ pipeline {
 
   options {
     ansiColor('xterm')
-    gitLabConnection('ubuntu32')
     //skipDefaultCheckout(true)
   }
 
   triggers {
-//    gitlab(triggerOnPush: true, triggerOnMergeRequest: true, branchFilterType: 'All')
     pollSCM('H/5 8-20 1-6 * *')
     cron('30 02 * * 1')
   }
@@ -53,14 +51,7 @@ pipeline {
         sh "./clean.sh"
         sh "sudo chown -R jenkins:jenkins ."
 
-        echo "Debug branch name"
-        echo "env.gitlabBranch: " + env.gitlabBranch
-        echo "scm.branches[0].name: " + scm.branches[0].name
-        echo "{GIT_BRANCH}: " + "${GIT_BRANCH}"
-        echo "BRANCH_NAME is set to: " + "${BRANCH_NAME}"
-
         checkout scm
-        updateGitlabCommitStatus name: 'Clean', state: 'success'
       }
     }
 
@@ -70,8 +61,6 @@ pipeline {
         timeout(30) {
           sh "./up.sh"
         }
-
-        updateGitlabCommitStatus name: 'Provision', state: 'success'
       }
     }
 
@@ -87,8 +76,6 @@ pipeline {
             sh script:"vagrant ssh -c 'sudo /vagrant/docker/build.sh bionic ${VERSION} ${DOCKER_HUB_USERNAME} ${DOCKER_HUB_PASSWORD}'", returnStatus:true
           }
         }
-
-        updateGitlabCommitStatus name: 'Build', state: 'success'
       }
     }
 
@@ -99,8 +86,6 @@ pipeline {
           sh script:"docker-compose up", returnStatus:true
           //sh script:"docker-compose run web syntax-check.sh", returnStatus:true
         }
-
-        updateGitlabCommitStatus name: 'Quality', state: 'success'
       }
     }
 
@@ -112,8 +97,6 @@ pipeline {
           sh "docker-compose run app /tmp/test.sh2ju || true"
           junit 'reports/TEST-default.xml'
         }
-
-        updateGitlabCommitStatus name: 'Unit Test', state: 'success'
       }
     }
 
@@ -124,8 +107,6 @@ pipeline {
       steps {
         echo "Running Acceptance Tests"
 //        build job: 'another-job', propagate: false
-
-        updateGitlabCommitStatus name: 'Acceptance Test', state: 'success'
       }
     }
   }
