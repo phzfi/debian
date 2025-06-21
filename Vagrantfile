@@ -78,4 +78,13 @@ Vagrant.configure("2") do |config|
      #echo "Init: $KEY"
      #pass init "$KEY"
   SHELL
+
+  #Fix SSH port 2222 conflict with docker on CI executors causing vagrant up to fail
+  #TODO please change the SSH host port to an unique port to avoid conflict
+  #Update the port to https://wiki.phz.fi/Vagrant#Ports
+  config.vm.usable_port_range = 63050..63999
+  #TODO Please change the host port to an unique port and write it down to https://wiki.phz.fi/Vagrant#Ports
+  # Suggestion: use the latter part of the IP (from above) i.e. 59.3 -> (63)593
+  config.vm.network "forwarded_port", guest: 22, host: 63901, id: "ssh"
+
 end
