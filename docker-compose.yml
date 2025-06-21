@@ -1,7 +1,6 @@
-version: '3.5'
 services:
   app:
-    image: phzfi/ubuntu32:latest
+    image: phzfi/debian:bookworm-latest
     volumes:
      - ./reports:/tmp/results
      - ./tests:/tests

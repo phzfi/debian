@@ -1,5 +1,5 @@
 #!/bin/bash -ex
-### Build a docker image for ubuntu i386.
+### Build a docker image for phzfi/debian.
 
 SUITE=bookworm
 if [ ! -z $1 ]; then
@@ -65,7 +65,6 @@ deb $apt_mirror $suite-backports main contrib non-free
 deb $apt_mirror $suite main
 EOF
 
-### install ubuntu-minimal
 cp /etc/resolv.conf $chroot_dir/etc/resolv.conf
 sudo mount -o bind /proc $chroot_dir/proc
 chroot $chroot_dir apt-get update
