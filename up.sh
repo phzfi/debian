@@ -1,2 +1,2 @@
 #!/bin/bash
-vagrant up
+~/workspace/vagrant/phz-vagrant-metadata/scripts/vagrantup
