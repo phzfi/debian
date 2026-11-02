@@ -1,7 +1,7 @@
 #!/bin/bash -ex
 ### Build a docker image for phzfi/debian.
 
-SUITE=tixie
+SUITE=bookworm
 if [ ! -z $1 ]; then
     SUITE=$1
 fi
