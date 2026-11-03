@@ -53,6 +53,7 @@ fi
 
 ### install a minbase system with debootstrap
 export DEBIAN_FRONTEND=noninteractive
+echo "debootstrap --variant=minbase --arch=$arch $suite $chroot_dir $apt_mirror"
 debootstrap --variant=minbase --arch=$arch $suite $chroot_dir $apt_mirror
 echo "DONE"
 
