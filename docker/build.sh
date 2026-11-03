@@ -3,6 +3,9 @@
 
 # debug prints...
 
+SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
+
+
 uname -a
 sleep 120
 
@@ -55,7 +58,14 @@ if test $TEST -eq 0; then
 fi
 
 ###Clean
-./clean.sh $suite
+if ! [ -f $SCRIPT_DIR/clean.sh]; then
+  $SCRIPT_DIR/clean.sh $suite
+elif ! [ -f $SCRIPT_DIR/../clean.sh  ]; then
+  $SCRIPT_DIR/../clean.sh $suite
+else
+  echo "FAIL: cleanup failed. Exiting."
+  exit 1
+fi
 
 ### install a minbase system with debootstrap
 export DEBIAN_FRONTEND=noninteractive
