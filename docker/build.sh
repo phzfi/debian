@@ -1,6 +1,12 @@
 #!/bin/bash -ex
 ### Build a docker image for phzfi/debian.
 
+# debug prints...
+
+uname -a
+sleep 120
+
+
 SUITE=bookworm
 if [ ! -z $1 ]; then
     SUITE=$1
@@ -69,13 +75,18 @@ EOF
 cp /etc/resolv.conf $chroot_dir/etc/resolv.conf
 sudo mount -o bind /proc $chroot_dir/proc
 chroot $chroot_dir apt-get update
+echo "starting upgrade..."
 chroot $chroot_dir apt-get -y upgrade
+echo "upgrade done".
+echo "installing gnupg2"
 chroot $chroot_dir apt-get -y install gnupg2
+echo "gnupg2 installed"
 
 cp /vagrant/pkg.phz.fi.gpg $chroot_dir/root/pkg.phz.fi.gpg
 chroot $chroot_dir apt-key add /root/pkg.phz.fi.gpg
 echo "deb http://pkg.phz.fi/$suite ./" > $chroot_dir/etc/apt/sources.list.d/pkg.phz.fi.list
 chroot $chroot_dir apt-get update
+echo "installing common packages"
 chroot $chroot_dir apt-get -y install \
     phz-common \
     software-properties-common \
