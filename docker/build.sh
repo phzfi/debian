@@ -58,7 +58,7 @@ if test $TEST -eq 0; then
 fi
 
 ###Clean
-if ! [ -f $SCRIPT_DIR/clean.sh]; then
+if ! [ -f $SCRIPT_DIR/clean.sh ]; then
   $SCRIPT_DIR/clean.sh $suite
 elif ! [ -f $SCRIPT_DIR/../clean.sh  ]; then
   $SCRIPT_DIR/../clean.sh $suite
