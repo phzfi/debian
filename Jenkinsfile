@@ -83,8 +83,8 @@ pipeline {
       steps {
         echo "Running Code Quality checks"
         timeout(15) {
-          sh script:"docker-compose up", returnStatus:true
-          //sh script:"docker-compose run web syntax-check.sh", returnStatus:true
+          sh script:"docker compose up", returnStatus:true
+          //sh script:"docker compose run web syntax-check.sh", returnStatus:true
         }
       }
     }
@@ -94,7 +94,7 @@ pipeline {
         echo "Running unit tests"       
         timeout(15) {
           //Suppress the exit code so that Jenkins can report the number of failures or mark the build unstable
-          sh "docker-compose run app /tmp/test.sh2ju || true"
+          sh "docker compose run app /tmp/test.sh2ju || true"
           junit 'reports/TEST-default.xml'
         }
       }
