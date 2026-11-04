@@ -1,9 +1,11 @@
 #!/bin/bash
 
+cd /tmp
+
+# sh2ju.sh uses current folder as part of result folder -> start by cd:ing to /tmp.
 source /usr/src/shell2junit/sh2ju.sh
 source ~/.env
 
-cd /tmp
 
 juLog -name=TestGitIsInstalled \
    [ `which git | wc -l` -eq 1 ]
