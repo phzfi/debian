@@ -94,9 +94,7 @@ pipeline {
         echo "Running unit tests"       
         timeout(15) {
           //Suppress the exit code so that Jenkins can report the number of failures or mark the build unstable
-          sh "docker compose run app /tmp/test.sh2ju || true"
-          sh "docker compose run app ls /tmp || true"
-          sh "docker compose run app ls /tmp/reports || true"
+          sh "docker compose run app /tmp/test.sh2ju || echo 'tmp' || ls /tmp || echo 'reports' || ls /tmp/reports || true"
           sh "ls . || true"
           sh "ls reports || true"
           sh "ls /tmp || true"
