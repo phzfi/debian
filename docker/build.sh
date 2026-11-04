@@ -123,15 +123,23 @@ test -z "$chroot_pids" || (kill -9 $chroot_pids; sleep 2)
 sudo umount $chroot_dir/proc
 
 ### create a tar archive from the chroot directory
+echo "tarballing"
 tar cfz debian.tgz -C $chroot_dir .
+echo "tarballing done."
+echo "ls ."
 
+echo "importing the image to docker"
 ### import this tar archive into a docker image:
 cat debian.tgz | docker import - $docker_image --message "Build with https://github.com/phzfi/debian"
 
 # ### push image to Docker Hub
+echo "tagging docker image: $docker_image $docker_image"
 docker tag $docker_image $docker_image
+echo "tagging docker image: $docker_image $LATEST"
 docker tag $docker_image $LATEST
+echo "pushing $docker_image"
 docker push $docker_image
+echo "Pushing $LATEST"
 docker push $LATEST
 
 ### cleanup
