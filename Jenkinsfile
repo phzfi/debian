@@ -95,6 +95,9 @@ pipeline {
         timeout(15) {
           //Suppress the exit code so that Jenkins can report the number of failures or mark the build unstable
           sh "docker compose run app /tmp/test.sh2ju || true"
+          ls "."
+          ls "reports"
+          ls "/tmp"
           junit 'reports/TEST-default.xml'
         }
       }
