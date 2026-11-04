@@ -125,8 +125,8 @@ pipeline {
       script {
         if ([master: true, develop: true].get(BRANCH_NAME, false)) {
           //TODO fatal: could not read Username for 'http://git.in.phz.fi': No such device or address
-          sh "git tag -a -m \"${env.BUILD_ENV}-${env.BUILD_NUMBER}\" ${env.BUILD_ENV}-${env.BUILD_NUMBER}"
-          sh "git push --tags"
+          //sh "git tag -a -m \"${env.BUILD_ENV}-${env.BUILD_NUMBER}\" ${env.BUILD_ENV}-${env.BUILD_NUMBER}"
+          //sh "git push --tags"
 
           slackSend channel: "${SLACK_CHANNEL}", color: "green", message: "${PROJECT_NAME} ${env.BUILD_ENV}-${env.BUILD_NUMBER} build succeeded! Please download container for Smoke Testing: ${PROJECT_LOCATION}). After Smoke Tests (see README.md #4.1), please Add Reaction thumbsup or thumbsdown depending whether Smoke Test cases pass or not.\n${CHANGELOG}", notifyCommitters: true
         }

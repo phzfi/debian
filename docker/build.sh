@@ -6,10 +6,6 @@
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 
 
-uname -a
-sleep 120
-
-
 SUITE=bookworm
 if [ ! -z $1 ]; then
     SUITE=$1
@@ -69,9 +65,7 @@ fi
 
 ### install a minbase system with debootstrap
 export DEBIAN_FRONTEND=noninteractive
-echo "debootstrap --variant=minbase --arch=$arch $suite $chroot_dir $apt_mirror"
 debootstrap --variant=minbase --arch=$arch $suite $chroot_dir $apt_mirror
-echo "DONE"
 
 ### update the list of package sources
 sudo cat <<EOF > $chroot_dir/etc/apt/sources.list
@@ -85,12 +79,8 @@ EOF
 cp /etc/resolv.conf $chroot_dir/etc/resolv.conf
 sudo mount -o bind /proc $chroot_dir/proc
 chroot $chroot_dir apt-get update
-echo "starting upgrade..."
 chroot $chroot_dir apt-get -y upgrade
-echo "upgrade done".
-echo "installing gnupg2"
 chroot $chroot_dir apt-get -y install gnupg2
-echo "gnupg2 installed"
 
 cp /vagrant/pkg.phz.fi.gpg $chroot_dir/root/pkg.phz.fi.gpg
 chroot $chroot_dir apt-key add /root/pkg.phz.fi.gpg
@@ -123,12 +113,8 @@ test -z "$chroot_pids" || (kill -9 $chroot_pids; sleep 2)
 sudo umount $chroot_dir/proc
 
 ### create a tar archive from the chroot directory
-echo "tarballing"
 tar cfz debian.tgz -C $chroot_dir .
-echo "tarballing done."
-echo "ls ."
 
-echo "importing the image to docker"
 ### import this tar archive into a docker image:
 cat debian.tgz | docker import - $docker_image --message "Build with https://github.com/phzfi/debian"
 
