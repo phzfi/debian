@@ -2,9 +2,9 @@
 
 ## 1. Project Description
 
-Build a docker image for PHZ Debian i386. https://hub.docker.com/r/phzfi/debian32
+Build docker images for PHZ Debian i386 and amd64, published as the multi-arch image `phzfi/debian` on Docker Hub. https://hub.docker.com/r/phzfi/debian
 
-Run `build-image.sh` to build the docker image `phzfi/debian32:sid`.
+Run `docker/build.sh` to build the docker images `phzfi/debian:bookworm-latest-i386` and `phzfi/debian:bookworm-latest-amd64`, combined into the multi-arch images `phzfi/debian:bookworm-<version>` and `phzfi/debian:bookworm-latest`.
 
 See also:
  - https://github.com/ioft/dockerhub
@@ -27,8 +27,10 @@ Use older 32bit hardware for sustainable development and sustainable code. Reduc
 
 ### 2.1. Technologies
 
-* Docker 32bit
-* Debian (sid)
+* Docker 32bit and 64bit (multi-arch manifest list on Docker Hub)
+* Debian (bookworm)
+* debootstrap cross-build (the i386 chroot is executed by the host kernel's 32-bit support, qemu-user-static as fallback)
+* Docker BuildKit (`docker build --platform`) to import the rootfs tar with correct architecture metadata
 * Jenkins declarative multibranch pipeline
 * Vagrant during building
 * sh2ju for testing

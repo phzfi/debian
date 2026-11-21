@@ -1,0 +1,7 @@
+### Import a pre-built rootfs tar archive into a scratch image.
+### The architecture metadata of the resulting image is set by
+### `docker build --platform` (see build.sh), and the tar archive to
+### extract is selected with the arch build-arg.
+FROM scratch
+ARG arch=amd64
+ADD debian-${arch}.tgz /

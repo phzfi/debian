@@ -68,7 +68,7 @@ Vagrant.configure("2") do |config|
   config.vm.provision "shell", inline: <<-SHELL
      apt-get update
      echo "Running installs...."
-     apt-get install -y debootstrap schroot apparmor docker.io docker-compose gnupg2 pass build-essential dkms
+     apt-get install -y debootstrap schroot apparmor docker.io docker-compose gnupg2 pass build-essential dkms qemu-user-static binfmt-support
      #see https://stackoverflow.com/questions/51222996/docker-login-fails-on-a-server-with-no-x11-installed
      mkdir -p ~/.password-store
      mkdir -p ~/.gnupg

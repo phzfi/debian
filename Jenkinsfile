@@ -72,7 +72,7 @@ pipeline {
         withCredentials([
           [$class: 'UsernamePasswordMultiBinding', credentialsId: 'DOCKER_HUB', usernameVariable: 'DOCKER_HUB_USERNAME', passwordVariable: 'DOCKER_HUB_PASSWORD']
         ]) {
-          timeout(400) {
+          timeout(600) {
             sh script:"vagrant ssh -c 'sudo /vagrant/docker/build.sh bookworm ${VERSION} ${DOCKER_HUB_USERNAME} ${DOCKER_HUB_PASSWORD}'", returnStatus:true
           }
         }
@@ -98,7 +98,7 @@ pipeline {
           sh "ls . || true"
           sh "ls reports || true"
           sh "ls /tmp || true"
-          junit 'reports/TEST-default.xml'
+          junit 'reports/TEST-*.xml'
         }
       }
     }
