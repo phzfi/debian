@@ -1,7 +1,7 @@
 #!/bin/bash -ex
-### Build docker images for phzfi/debian for the i386 and amd64 architectures.
-### The images are published as per-architecture tags and combined into
-### multi-arch manifest lists (see end of this script).
+### Build docker images for phzfi/debian for the arm64, i386 and amd64
+### architectures. The images are published as per-architecture tags and
+### combined into multi-arch manifest lists (see end of this script).
 
 # debug prints...
 
@@ -30,7 +30,9 @@ fi
 docker login -u $USER -p $PASSWORD
 
 ### settings
-arch_list="i386 amd64"
+### arm64 = Raspberry Pi 3/4/5/Zero 2, ARM SBCs, ARM servers (Graviton).
+### First in the list: the cross-built arch gates the pipeline fastest.
+arch_list="arm64 i386 amd64"
 apt_mirror="https://deb.debian.org/debian/"
 docker_image="phzfi/debian:$suite-$VERSION"
 LATEST="phzfi/debian:$suite-latest"
@@ -66,6 +68,7 @@ export DEBIAN_FRONTEND=noninteractive
 export DOCKER_BUILDKIT=1
 
 ### build each architecture
+manifest_members=()
 for arch in $arch_list; do
   chroot_dir="/var/chroot/$suite-$arch"
   echo "building $arch"
@@ -79,18 +82,24 @@ for arch in $arch_list; do
   ### install a minbase system with debootstrap
   debootstrap --variant=minbase --arch=$arch $suite $chroot_dir $apt_mirror
 
-  ### verify the chroot was built for the expected architecture: the ELF class
-  ### of /bin/ls (ELFCLASS32/01 for i386, ELFCLASS64/02 for amd64).
-  ### Note: uname -m cannot be used here, the host kernel reports its own arch
-  ### for the i386 binaries (native ia32 support, qemu-user-static as fallback).
-  expected_elf_class=01
-  if [ "$arch" = "amd64" ]; then
-    expected_elf_class=02
-  fi
-  elf_class=`od -An -tx1 -j4 -N1 $chroot_dir/bin/ls | tr -d ' '`
-  echo "chroot $arch ELF class: $elf_class"
-  if [ "$elf_class" != "$expected_elf_class" ]; then
-    echo "FAIL: chroot $arch expected ELF class $expected_elf_class, got $elf_class"
+  ### verify the chroot was built for the expected architecture: the ELF
+  ### e_machine field (bytes 18-19, little endian) of /bin/ls:
+  ### 3e00 x86-64 (amd64), 0300 x86 (i386), b700 AArch64 (arm64).
+  ### Note: uname -m cannot be used here, the host kernel reports its own
+  ### arch (native ia32 support for i386, qemu-user-static binfmt for arm64).
+  expected_elf_machine=3e00
+  case "$arch" in
+    i386)
+      expected_elf_machine=0300
+      ;;
+    arm64)
+      expected_elf_machine=b700
+      ;;
+  esac
+  elf_machine=`od -An -tx1 -j18 -N2 $chroot_dir/bin/ls | tr -d ' '`
+  echo "chroot $arch ELF machine: $elf_machine"
+  if [ "$elf_machine" != "$expected_elf_machine" ]; then
+    echo "FAIL: chroot $arch expected ELF machine $expected_elf_machine, got $elf_machine"
     exit 1
   fi
 
@@ -160,6 +169,9 @@ EOF
   ### push the per-architecture image to Docker Hub
   echo "pushing $docker_image-$arch"
   docker push $docker_image-$arch
+
+  ### collect the member for the multi-arch manifest lists below
+  manifest_members+=(--amend $docker_image-$arch)
 done
 
 ### create and push the multi-arch manifest lists.
@@ -172,10 +184,10 @@ case "$docker_image" in
     manifest_flags="--insecure"
     ;;
 esac
-docker manifest create $manifest_flags $docker_image --amend $docker_image-i386 --amend $docker_image-amd64
+docker manifest create $manifest_flags $docker_image "${manifest_members[@]}"
 docker manifest push $manifest_flags $docker_image
-docker manifest create $manifest_flags $LATEST --amend $docker_image-i386 --amend $docker_image-amd64
+docker manifest create $manifest_flags $LATEST "${manifest_members[@]}"
 docker manifest push $manifest_flags $LATEST
 
-### verify the manifest list contains both architectures
+### verify the manifest list contains all the architectures
 docker manifest inspect $manifest_flags $LATEST

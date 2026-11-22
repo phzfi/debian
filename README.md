@@ -2,9 +2,9 @@
 
 ## 1. Project Description
 
-Build docker images for PHZ Debian i386 and amd64, published as the multi-arch image `phzfi/debian` on Docker Hub. https://hub.docker.com/r/phzfi/debian
+Build docker images for PHZ Debian arm64, i386 and amd64, published as the multi-arch image `phzfi/debian` on Docker Hub. https://hub.docker.com/r/phzfi/debian
 
-Run `docker/build.sh` to build the docker images `phzfi/debian:bookworm-latest-i386` and `phzfi/debian:bookworm-latest-amd64`, combined into the multi-arch images `phzfi/debian:bookworm-<version>` and `phzfi/debian:bookworm-latest`.
+Run `docker/build.sh` to build the docker images `phzfi/debian:bookworm-latest-arm64`, `phzfi/debian:bookworm-latest-i386` and `phzfi/debian:bookworm-latest-amd64`, combined into the multi-arch images `phzfi/debian:bookworm-<version>` and `phzfi/debian:bookworm-latest`. The arm64 image runs on popular ARM boards (Raspberry Pi 3/4/5/Zero 2, ARM SBCs) and ARM servers (AWS Graviton). To add 32-bit ARM (armhf), extend `arch_list` in `docker/build.sh`; its Docker platform is `linux/arm/v7`.
 
 See also:
  - https://github.com/ioft/dockerhub
@@ -27,9 +27,9 @@ Use older 32bit hardware for sustainable development and sustainable code. Reduc
 
 ### 2.1. Technologies
 
-* Docker 32bit and 64bit (multi-arch manifest list on Docker Hub)
+* Docker ARM64, 32bit and 64bit (multi-arch manifest list on Docker Hub)
 * Debian (bookworm)
-* debootstrap cross-build (the i386 chroot is executed by the host kernel's 32-bit support, qemu-user-static as fallback)
+* debootstrap cross-build (the i386 chroot is executed by the host kernel's 32-bit support; the arm64 chroot runs under qemu-user-static binfmt emulation)
 * Docker BuildKit (`docker build --platform`) to import the rootfs tar with correct architecture metadata
 * Jenkins declarative multibranch pipeline
 * Vagrant during building

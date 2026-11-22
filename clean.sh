@@ -9,8 +9,11 @@ rm reports/* || true
 rm -f debian.tgz
 rm -f debian-*.tgz
 
-for arch in i386 amd64; do
-  chroot_dir=/var/chroot/$suite-$arch
+### the per-architecture chroots created by build.sh (plus the legacy
+### "$suite" name from the single-arch builds); glob-based so new
+### architectures in build.sh's arch_list are cleaned up automatically
+for chroot_dir in /var/chroot/$suite /var/chroot/$suite-*; do
+  [ -d $chroot_dir ] || continue
   echo $chroot_dir
   if [ -d $chroot_dir/proc ]; then
     mountpoint -q $chroot_dir/proc && umount $chroot_dir/proc
