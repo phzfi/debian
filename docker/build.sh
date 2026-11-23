@@ -38,6 +38,7 @@ suite=${1:-unstable}
 date=`date +%Y%m%d`
 chroot_dir="/var/chroot/$suite"
 apt_mirror="https://deb.debian.org/debian/"
+security_mirror="https://security.debian.org/debian-security"
 docker_image="phzfi/debian:$suite-$VERSION"
 LATEST="phzfi/debian:$suite-latest"
 
@@ -77,7 +78,8 @@ deb $apt_mirror $suite main contrib non-free
 deb $apt_mirror $suite-updates main contrib non-free
 deb $apt_mirror $suite-backports main contrib non-free
 
-deb $apt_mirror $suite main
+deb $security_mirror $suite-security main contrib non-free non-free-firmware
+
 EOF
 
 cp /etc/resolv.conf $chroot_dir/etc/resolv.conf
